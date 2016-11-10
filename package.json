@@ -1,0 +1,34 @@
+{
+  "name": "gonogo",
+  "version": "0.0.0",
+  "description": "Simple, lightweight object validation",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc mocha --recursive",
+    "test:watch": "mocha --recursive --watch",
+    "coverage": "nyc report",
+    "coverage:html": "nyc report --reporter=html && open coverage/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcous/gonogo.git"
+  },
+  "keywords": [
+    "schema",
+    "props",
+    "validate",
+    "assert"
+  ],
+  "author": "Mike Cousins <mike@cousins.io>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mcous/gonogo/issues"
+  },
+  "homepage": "https://github.com/mcous/gonogo#readme",
+  "devDependencies": {
+    "mocha": "^3.1.2",
+    "nyc": "^8.4.0",
+    "standard": "^8.5.0",
+    "zuul": "^3.11.1"
+  }
+}
