@@ -4,10 +4,16 @@
   "description": "Simple, lightweight object validation",
   "main": "index.js",
   "scripts": {
+    "lint": "standard",
     "test": "nyc mocha --recursive",
     "test:watch": "mocha --recursive --watch",
+    "posttest": "npm run lint",
     "coverage": "nyc report",
     "coverage:html": "nyc report --reporter=html && open coverage/index.html"
+  },
+  "nyc": {
+    "include": "*.js",
+    "all": true
   },
   "repository": {
     "type": "git",
