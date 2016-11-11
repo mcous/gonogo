@@ -1,6 +1,14 @@
 // wrap a function with a schema checker
 'use strict'
 
-module.exports = function wrapWithGonogo () {
+const gng = require('./')
 
+module.exports = function wrapWithGonogo (target, schema) {
+  const validate = gng(schema)
+
+  return (props) => {
+    validate(props)
+
+    return target(props)
+  }
 }

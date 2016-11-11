@@ -26,7 +26,7 @@ const target = {
 const validate = gng({
   name: gng.string,
   count: gng.number
-  children: gng.array(gng.object({name: gng.string}))
+  children: gng.array.with(gng.object.with({name: gng.string}))
 })
 
 validate(target)
@@ -97,7 +97,7 @@ Example with schema object:
 
 #### gng.object
 
-#### gng.ok
+#### gng.pass
 
 [node]: https://nodejs.org/en/
 [npm]: https://www.npmjs.com/
