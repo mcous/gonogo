@@ -4,6 +4,7 @@
 const assert = require('assert')
 const describe = require('mocha').describe
 const it = require('mocha').it
+
 const gng = require('../')
 
 describe('gonogo', function () {
@@ -29,7 +30,7 @@ describe('gonogo', function () {
 
     assert.throws(
       () => validate('pass'),
-      /value > pass < failed validation function/)
+      /value > pass < failed/)
   })
 
   it('should not throw if a target passes validation functions for all its keys', function () {
@@ -45,6 +46,6 @@ describe('gonogo', function () {
 
     assert.throws(
       () => validate({foo: 'pass', bar: 'pass', baz: 'pass'}),
-      /field 'bar' failed validation function/)
+      /field > bar <, value > pass < failed/)
   })
 })
