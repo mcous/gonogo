@@ -18,7 +18,7 @@ describe('gonogo/wrap', function () {
   it('should pass target to the wrapped function if it passes validation', function () {
     const schema = {foo: gng.string}
     const component = td.function('.wrapped')
-    const wrapped = wrap(component, schema)
+    const wrapped = wrap(schema, component)
 
     wrapped({foo: 'bar'})
     td.verify(component({foo: 'bar'}))
@@ -27,7 +27,7 @@ describe('gonogo/wrap', function () {
   it('should pass throw if it fails validation', function () {
     const schema = {foo: gng.string}
     const component = td.function('.wrapped')
-    const wrapped = wrap(component, schema)
+    const wrapped = wrap(schema, component)
 
     assert.throws(() => wrapped({foo: 42}))
     td.verify(component(), {times: 0, ignoreExtraArgs: true})

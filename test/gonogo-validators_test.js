@@ -45,7 +45,7 @@ describe('gonogo - validator functions', function () {
     const schema = gng.pass((value) => value === 'pass')
     const validate = gng(schema)
 
-    validate('pass') === true
+    validate('pass')
     assert.throws(() => validate('fail'), /failed/)
   })
 
