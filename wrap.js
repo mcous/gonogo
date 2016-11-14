@@ -3,7 +3,7 @@
 
 const gng = require('./')
 
-module.exports = function wrapWithGonogo (target, schema) {
+module.exports = function wrapWithGonogo (schema, target) {
   const validate = gng(schema)
 
   return (props) => {
