@@ -162,16 +162,16 @@ validate({foo: 'pass', bar: 'pass', baz: 'pass'}) // nothing happens
 validate({foo: 'pass', bar: 'fail', baz: 'pass'}) // throws
 ```
 
-If a validation function has a `message` property attached, the thrown error will include it:
+The validation function's `toString` method will be called and added to the thrown error. You may override `toString` to make validation failure reasons more clear:
 
 ``` js
 const schema = (value) => value === 'pass'
 
-schema.message = 'the value "pass"'
+schema.toString = () => '[the value "pass"]'
 
 const validate = gng(schema)
 
-validate('fail') // throws with message '...expected the value "pass"'
+validate('fail') // throws with message '...failed to satisfy [the value "pass"]'
 ```
 
 ### built-in validation functions

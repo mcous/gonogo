@@ -1,9 +1,6 @@
 'use strict'
 
 const assert = require('assert')
-const suite = require('mocha').suite
-const test = require('mocha').test
-
 const validate = require('../lib/validate')
 
 const EXAMPLE_STRING = 'foo'

@@ -2,9 +2,6 @@
 'use strict'
 
 const assert = require('assert')
-const suite = require('mocha').suite
-const test = require('mocha').test
-
 const gng = require('../')
 
 suite('gonogo', function () {
@@ -12,12 +9,12 @@ suite('gonogo', function () {
   const isFail = (value) => value === 'fail'
   const isFoo = (value) => value === 'foo'
 
-  Object.defineProperty(isFoo, 'message', {value: 'the value "foo"'})
+  isFoo.toString = () => '[the value "foo"]'
 
   test('throws if schema is not a function nor object', function () {
-    assert.throws(() => gng(1), /expected function or object/)
-    assert.throws(() => gng(false), /expected function or object/)
-    assert.throws(() => gng(''), /expected function or object/)
+    assert.throws(() => gng(1), /expected.+function or object/)
+    assert.throws(() => gng(false), /expected.+function or object/)
+    assert.throws(() => gng(''), /expected.+function or object/)
   })
 
   test('does not throw if value passes validation function', function () {
@@ -32,7 +29,7 @@ suite('gonogo', function () {
     const validate = gng(schema)
     const run = () => validate('pass')
 
-    assert.throws(run, /value > pass < failed/)
+    assert.throws(run, /value "pass" failed/)
   })
 
   test('does not throw if keys of object pass validation functions', function () {
@@ -47,22 +44,22 @@ suite('gonogo', function () {
     const validate = gng(schema)
     const run = () => validate({foo: 'pass', bar: 'pass', baz: 'pass'})
 
-    assert.throws(run, /field > bar <, value > pass < failed/)
+    assert.throws(run, /"bar" -> "pass" failed/)
   })
 
-  test('throws message if validation function has message property', function () {
+  test('calls toString of validation function for error message', function () {
     const schema = isFoo
     const validate = gng(schema)
     const run = () => validate('bar')
 
-    assert.throws(run, /expected the value "foo"/)
+    assert.throws(run, /\[the value "foo"\]/)
   })
 
-  test('throws message if validation function of key has message property', function () {
+  test('calls toString of validation function of key for error', function () {
     const schema = {foo: isFoo}
     const validate = gng(schema)
     const run = () => validate({foo: 'bar'})
 
-    assert.throws(run, /expected the value "foo"/)
+    assert.throws(run, /\[the value "foo"\]/)
   })
 })

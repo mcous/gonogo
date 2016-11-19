@@ -1,7 +1,7 @@
 // wrap a function with a schema checker
 'use strict'
 
-const gng = require('./')
+const base = require('./lib/base')
 
 module.exports = function wrapWithGonogo () {
   const validators = []
@@ -9,12 +9,22 @@ module.exports = function wrapWithGonogo () {
   const target = arguments[numberOfValidators]
 
   for (let i = 0; i < numberOfValidators; i++) {
-    validators.push(gng(arguments[i]))
+    validators.push(base(arguments[i]))
   }
 
   return function postValidateWrapCaller () {
+    let message = ''
+
     for (let j = 0; j < arguments.length; j++) {
-      validators[j] && validators[j](arguments[j])
+      const argMessage = validators[j] && validators[j](arguments[j])
+
+      if (argMessage) {
+        message += `argument ${j} - ${argMessage}`
+      }
+    }
+
+    if (message) {
+      throw new Error(`gng wrap for ${target.name}: ${message}`)
     }
 
     return target.apply(null, arguments)
