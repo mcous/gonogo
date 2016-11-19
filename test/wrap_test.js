@@ -2,20 +2,20 @@
 'use strict'
 
 const assert = require('assert')
-const describe = require('mocha').describe
+const suite = require('mocha').suite
 const beforeEach = require('mocha').beforeEach
-const it = require('mocha').it
+const test = require('mocha').test
 const td = require('testdouble')
 
 const gng = require('../')
 const wrap = require('../wrap')
 
-describe('gonogo/wrap', function () {
+suite('gonogo/wrap', function () {
   beforeEach(function () {
     td.reset()
   })
 
-  it('should pass target to the wrapped function if it passes validation', function () {
+  test('calls wrapped function if target passes validation', function () {
     const schema = {foo: gng.string}
     const component = td.function('.wrapped')
     const wrapped = wrap(schema, component)
@@ -24,7 +24,7 @@ describe('gonogo/wrap', function () {
     td.verify(component({foo: 'bar'}))
   })
 
-  it('should pass throw if it fails validation', function () {
+  test('throws and does not call function if target fails', function () {
     const schema = {foo: gng.string}
     const component = td.function('.wrapped')
     const wrapped = wrap(schema, component)

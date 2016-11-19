@@ -9,10 +9,14 @@
     "test:watch": "mocha --recursive --watch",
     "posttest": "npm run lint",
     "coverage": "nyc report",
-    "coverage:html": "nyc report --reporter=html && open coverage/index.html"
+    "coverage:html": "nyc report --reporter=html && open coverage/index.html",
+    "doc": "doctoc README.md"
   },
   "nyc": {
-    "include": "*.js",
+    "include": [
+      "*.js",
+      "lib/*.js"
+    ],
     "all": true
   },
   "repository": {
@@ -32,10 +36,12 @@
   },
   "homepage": "https://github.com/mcous/gonogo#readme",
   "devDependencies": {
+    "doctoc": "^1.2.0",
     "mocha": "^3.1.2",
     "nyc": "^8.4.0",
     "standard": "^8.5.0",
     "testdouble": "^1.9.0",
     "zuul": "^3.11.1"
-  }
+  },
+  "dependencies": {}
 }

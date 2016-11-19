@@ -2,50 +2,67 @@
 'use strict'
 
 const assert = require('assert')
-const describe = require('mocha').describe
-const it = require('mocha').it
+const suite = require('mocha').suite
+const test = require('mocha').test
 
 const gng = require('../')
 
-describe('gonogo', function () {
-  const pass = (value) => value === 'pass'
-  const fail = (value) => value !== 'pass'
+suite('gonogo', function () {
+  const isPass = (value) => value === 'pass'
+  const isFail = (value) => value === 'fail'
+  const isFoo = (value) => value === 'foo'
 
-  it('should throw if the schema is not a function nor object', function () {
-    assert.throws(() => gng(1), /expected function or object schema/)
-    assert.throws(() => gng(false), /expected function or object schema/)
-    assert.throws(() => gng(''), /expected function or object schema/)
+  Object.defineProperty(isFoo, 'message', {value: 'the value "foo"'})
+
+  test('throws if schema is not a function nor object', function () {
+    assert.throws(() => gng(1), /expected function or object/)
+    assert.throws(() => gng(false), /expected function or object/)
+    assert.throws(() => gng(''), /expected function or object/)
   })
 
-  it('should not throw if a target passes a validation function', function () {
-    const schema = pass
+  test('does not throw if value passes validation function', function () {
+    const schema = isPass
     const validate = gng(schema)
 
     validate('pass')
   })
 
-  it('should throw if a target does not pass a validation function', function () {
-    const schema = fail
+  test('throws if value does not pass validation function', function () {
+    const schema = isFail
     const validate = gng(schema)
+    const run = () => validate('pass')
 
-    assert.throws(
-      () => validate('pass'),
-      /value > pass < failed/)
+    assert.throws(run, /value > pass < failed/)
   })
 
-  it('should not throw if a target passes validation functions for all its keys', function () {
-    const schema = {foo: pass, bar: pass, baz: pass}
+  test('does not throw if keys of object pass validation functions', function () {
+    const schema = {foo: isPass, bar: isPass, baz: isPass}
     const validate = gng(schema)
 
     validate({foo: 'pass', bar: 'pass', baz: 'pass'})
   })
 
-  it('should throw if a target fails validation functions for any of its keys', function () {
-    const schema = {foo: pass, bar: fail, baz: pass}
+  test('throws if any key of object fails validation function', function () {
+    const schema = {foo: isPass, bar: isFail, baz: isPass}
     const validate = gng(schema)
+    const run = () => validate({foo: 'pass', bar: 'pass', baz: 'pass'})
 
-    assert.throws(
-      () => validate({foo: 'pass', bar: 'pass', baz: 'pass'}),
-      /field > bar <, value > pass < failed/)
+    assert.throws(run, /field > bar <, value > pass < failed/)
+  })
+
+  test('throws message if validation function has message property', function () {
+    const schema = isFoo
+    const validate = gng(schema)
+    const run = () => validate('bar')
+
+    assert.throws(run, /expected the value "foo"/)
+  })
+
+  test('throws message if validation function of key has message property', function () {
+    const schema = {foo: isFoo}
+    const validate = gng(schema)
+    const run = () => validate({foo: 'bar'})
+
+    assert.throws(run, /expected the value "foo"/)
   })
 })
