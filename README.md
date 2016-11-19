@@ -12,9 +12,11 @@ gonogo is a _tiny_ library for validating JavaScript values, objects, and functi
 - [install](#install)
 - [usage](#usage)
   - [basic usage](#basic-usage)
-  - [wrap a function](#wrap-a-function)
+  - [validate function parameters](#validate-function-parameters)
+    - [validate prop types of a component](#validate-prop-types-of-a-component)
   - [production builds](#production-builds)
     - [browserify](#browserify)
+    - [webpack](#webpack)
 - [api](#api)
   - [built-in validation functions](#built-in-validation-functions)
     - [gng.any](#gngany)
@@ -44,6 +46,17 @@ Install using [npm] for use with [Node.js][node] and browsers via [Browserify][b
 
 ``` shell
 $ npm install --save-dev gonogo
+```
+
+**important note about browsers**
+
+`gonogo` is written with arrow functions, `const` / `let`, and template strings, so it'll run in any reasonable modern browser (Chrome, Firefox, Edge, Safari >= 10). For older browsers (Internet Explorer, Safari <= 9), you'll need a transform like [es2020][es2020].
+
+For, example, with broserify:
+
+``` shell
+$ npm install --save-dev browserify es2020
+$ browserify entry.js --global-transform=es2020 > bundle.js
 ```
 
 ## usage
@@ -113,7 +126,11 @@ If you're using `gonogo` as a tool during development, you probably want to remo
 
 #### browserify
 
-browserify -t gonogo/ungonogoify entry.js
+**BROWSERIFY INSTRUCTIONS WILL GO HERE MAYBE SOON BUT ALSO MAYBE NOT SOON**
+
+#### webpack
+
+**DITTO FOR WEBPACK**
 
 ## api
 
@@ -351,3 +368,4 @@ gng.function.lengthOf(3)((a, b) => a + b)         // false
 [react-prop-types]: https://facebook.github.io/react/docs/typechecking-with-proptypes.html
 [joi]: https://github.com/hapijs/joi
 [aproba]: https://github.com/iarna/aproba
+[es2020]: https://github.com/yoshuawuyts/es2020
