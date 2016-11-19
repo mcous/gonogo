@@ -4,6 +4,40 @@
 
 gonogo is a _tiny_ library for validating JavaScript values and objects. It was designed to check web component properties, but it's simple enough that you could probably use it for any basic object validation needs.
 
+## table of contents
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [install](#install)
+- [usage](#usage)
+  - [basic usage](#basic-usage)
+  - [wrap a function](#wrap-a-function)
+  - [production builds](#production-builds)
+    - [browserify](#browserify)
+- [api](#api)
+  - [built-in validation functions](#built-in-validation-functions)
+    - [gng.any](#gngany)
+      - [gng.any.optional](#gnganyoptional)
+      - [gng.any.nullable](#gnganynullable)
+      - [gng.any.pass](#gnganypass)
+      - [the useless validator](#the-useless-validator)
+    - [gng.string](#gngstring)
+      - [gng.string.lengthOf](#gngstringlengthof)
+      - [gng.string.match](#gngstringmatch)
+    - [gng.number](#gngnumber)
+    - [gng.boolean](#gngboolean)
+    - [gng.object](#gngobject)
+      - [gng.object.keys](#gngobjectkeys)
+    - [gng.array](#gngarray)
+      - [gng.array.items](#gngarrayitems)
+      - [gng.array.lengthOf](#gngarraylengthof)
+    - [gng.function](#gngfunction)
+      - [gng.function.lengthOf](#gngfunctionlengthof)
+- [related projects](#related-projects)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## install
 
 Install using [npm] for use with [Node.js][node] and browsers via [Browserify][br], [webpack][wp], et. al.
@@ -13,6 +47,10 @@ $ npm install --save-dev gonogo
 ```
 
 ## usage
+
+Pass `gonogo` a validator function or a schema object with validator functions as its values, and it will return a function you can use to validate values. For ease, `gonogo` comes packaged with a set of [chainable validator functions][#built-in-validation-functions] to use.
+
+### basic usage
 
 ``` js
 const gng = require('gonogo')
@@ -64,9 +102,9 @@ browserify -t gonogo/ungonogoify entry.js
 
 gonogo takes a schema object or validation function. It returns a function that you may use to validate a target. If the schema is not valid, gonogo will throw.
 
-If the schema is a validation function, the target will be passed to the schema and a true / false return value will determine if the target is valid. If the schema is an object, each key of the schema should be a validation function. Those keys will be used to validate the values of the target.
+Given a validation function, the test target will be passed to the function and a true / false return value will determine if the target is valid. Given a schema object, each key of the object should be a validation function. Those keys will be used to validate their corresponding values of the test target.
 
-Example with schema function:
+Example with validation function:
 
 ``` js
 const validate = gng((value) => value === 'pass')
