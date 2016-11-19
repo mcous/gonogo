@@ -1,8 +1,8 @@
 # gonogo
 
-> Simple, lightweight object validation
+> Simple, lightweight object and function parameter validation
 
-gonogo is a _tiny_ library for validating JavaScript values and objects. It was designed to check web component properties, but it's simple enough that you could probably use it for any basic object validation needs.
+gonogo is a _tiny_ library for validating JavaScript values, objects, and function parameters. It was designed to check web component properties during development, but it's simple enough that you could probably use it for any basic validation needs.
 
 ## table of contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -68,9 +68,9 @@ validate({
 }) // throws
 ```
 
-### wrap a function
+### validate function parameters
 
-You may package a function up with a set of validator functions / schemas in order to validate any parameters before passing them to the object
+You may wrap up a function up with a set of validator functions / schemas in order to validate any parameters before passing them to the wrapped function.
 
 ``` js
 const gng = require('gonogo')
@@ -86,7 +86,7 @@ iHave('roy', 'flurbos') // throws
 
 #### validate prop types of a component
 
-Using wrap, you can have a lightweight and functional prop types checker
+Using wrap, you can have a lightweight and functional web component prop types checker that will work in any framework, non-framework, or non-non-framework.
 
 ``` js
 const gng = require('gonogo')
@@ -342,6 +342,7 @@ gng.function.lengthOf(3)((a, b) => a + b)         // false
 
 * [React's PropTypes][react-prop-types]
 * [joi][joi]
+* [aproba][aproba]
 
 [node]: https://nodejs.org/en/
 [npm]: https://www.npmjs.com/
@@ -349,3 +350,4 @@ gng.function.lengthOf(3)((a, b) => a + b)         // false
 [wp]: https://webpack.github.io/
 [react-prop-types]: https://facebook.github.io/react/docs/typechecking-with-proptypes.html
 [joi]: https://github.com/hapijs/joi
+[aproba]: https://github.com/iarna/aproba

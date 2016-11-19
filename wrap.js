@@ -3,12 +3,20 @@
 
 const gng = require('./')
 
-module.exports = function wrapWithGonogo (schema, target) {
-  const validate = gng(schema)
+module.exports = function wrapWithGonogo () {
+  const validators = []
+  const numberOfValidators = arguments.length - 1
+  const target = arguments[numberOfValidators]
 
-  return (props) => {
-    validate(props)
+  for (let i = 0; i < numberOfValidators; i++) {
+    validators.push(gng(arguments[i]))
+  }
 
-    return target(props)
+  return function postValidateWrapCaller () {
+    for (let j = 0; j < arguments.length; j++) {
+      validators[j] && validators[j](arguments[j])
+    }
+
+    return target.apply(null, arguments)
   }
 }
