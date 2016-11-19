@@ -44,9 +44,7 @@
     "testdouble": "^1.9.0",
     "zuul": "^3.11.1"
   },
-  "dependencies": {
-    "json-stringify-safe": "^5.0.1"
-  },
+  "dependencies": {},
   "standard": {
     "env": {
       "mocha": true
