@@ -70,6 +70,24 @@ validate({
 
 ### wrap a function
 
+You may package a function up with a set of validator functions / schemas in order to validate any parameters before passing them to the object
+
+``` js
+const gng = require('gonogo')
+const gngWrap = require('gonogo/wrap')
+
+const iHave = gngWrap(gng.number, gng.string, (count, things) => {
+  console.log(`I have ${count} ${things}`)
+})
+
+iHave(3000, 'flurbos')  // works
+iHave('roy', 'flurbos') // throws
+```
+
+#### validate prop types of a component
+
+Using wrap, you can have a lightweight and functional prop types checker
+
 ``` js
 const gng = require('gonogo')
 const validateProps = require('gonogo/wrap')
@@ -83,14 +101,15 @@ const Component = validateProps({text: gng.string}, function renderComponent (pr
   return el
 })
 
-Component({text: 7}) // throws
+Component({text: 'hello'}) // works
+Component({text: 7})       // throws
 ```
 
 ### production builds
 
 **THIS STUFF IS NOT IMPLEMENTED, BUT IT'S COMING PROBABLY (?)**
 
-You probably want to remove these assertions in production builds
+If you're using `gonogo` as a tool during development, you probably want to remove these assertions in production builds.
 
 #### browserify
 
