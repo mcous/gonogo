@@ -1,6 +1,6 @@
 # gonogo
 
-> Simple, lightweight object and function parameter validation
+> Simple object and function parameter validation
 
 gonogo is a minimal, functional assertion library for validating JavaScript values, objects, and function parameters. It was designed to check web component properties during development, but it's simple enough that you could probably use it for any basic validation needs.
 
@@ -57,7 +57,7 @@ $ npm install --save-dev gonogo
 
 `gonogo` is written with arrow functions, `const` / `let`, and template strings, so it'll run in any reasonable modern browser (Chrome, Firefox, Edge, Safari >= 10). For older browsers (Internet Explorer, Safari <= 9), you'll need a transform like [es2020][es2020].
 
-For, example, with broserify:
+For, example, with browserify:
 
 ``` shell
 $ npm install --save-dev browserify es2020
@@ -104,7 +104,7 @@ iHave('roy', 'flurbos') // throws
 
 #### validate prop types of a component
 
-Using wrap, you can have a lightweight and functional web component prop types checker that will work in any framework, non-framework, or non-non-framework.
+Using wrap, you can have a functional web component prop types checker that will work in any framework, non-framework, or non-non-framework.
 
 ``` js
 const gng = require('gonogo')
@@ -127,7 +127,7 @@ Component({text: 7})       // throws
 
 **THIS STUFF IS NOT IMPLEMENTED, BUT IT'S COMING PROBABLY (?)**
 
-If you're using `gonogo` as a tool during development, you probably want to remove these assertions in production builds.
+If you're using `gonogo` as a tool during development, removing these assertions in production builds can get you back most of the bytes this library takes up (around 2,500 of them, after minification and gzip).
 
 #### browserify
 
@@ -426,7 +426,7 @@ Will pass anything, including `null` and `undefined`
 
 ``` js
 gng.any.optional.nullable(ANYTHING_OR_NOTHING) // true
-(() => true)(ANYTHING_OR_NOTHING)              // equivalent
+gng.any.or(() => true)(ANYTHING_OR_NOTHING)    // true
 ```
 
 ## related projects
