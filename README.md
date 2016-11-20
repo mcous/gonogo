@@ -1,5 +1,11 @@
 # gonogo
 
+[![npm][badge-npm]][badge-npm-href]
+[![travis][badge-travis]][badge-travis-href]
+[![codecov][badge-codecov]][badge-codecov-href]
+[![david][badge-david]][badge-david-href]
+[![badges][badge-badges]][badge-badges-href]
+
 > Simple object and function parameter validation
 
 gonogo is a minimal, functional assertion library for validating JavaScript values, objects, and function parameters. It was designed to check web component properties during development, but it's simple enough that you could probably use it for any basic validation needs.
@@ -447,3 +453,15 @@ gng.any.or(() => true)(ANYTHING_OR_NOTHING)    // true
 [joi]: https://github.com/hapijs/joi
 [aproba]: https://github.com/iarna/aproba
 [es2020]: https://github.com/yoshuawuyts/es2020
+
+[badge-npm]: https://img.shields.io/npm/v/gonogo.svg?style=flat-square&maxAge=14400
+[badge-codecov]: https://img.shields.io/codecov/c/github/mcous/gonogo/master.svg?style=flat-square&maxAge=14400
+[badge-travis]: https://img.shields.io/travis/mcous/gonogo/master.svg?style=flat-square&maxAge=14400
+[badge-david]: https://img.shields.io/david/mcous/gonogo.svg?style=flat-square&maxAge=14400
+[badge-badges]: https://img.shields.io/badge/badges-5-ff69b4.svg?style=flat-square&maxAge=14400
+
+[badge-npm-href]: https://www.npmjs.com/package/gonogo
+[badge-travis-href]: https://travis-ci.org/mcous/gonogo
+[badge-codecov-href]: https://codecov.io/gh/mcous/gonogo
+[badge-david-href]: https://david-dm.org/mcous/gonogo
+[badge-badges-href]: http://shields.io/
