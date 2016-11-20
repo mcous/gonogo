@@ -1,8 +1,8 @@
 # gonogo
 
-> Simple, lightweight object and function parameter validation
+> Simple object and function parameter validation
 
-gonogo is a _tiny_ library for validating JavaScript values, objects, and function parameters. It was designed to check web component properties during development, but it's simple enough that you could probably use it for any basic validation needs.
+gonogo is a minimal, functional assertion library for validating JavaScript values, objects, and function parameters. It was designed to check web component properties during development, but it's simple enough that you could probably use it for any basic validation needs.
 
 ## table of contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -18,12 +18,16 @@ gonogo is a _tiny_ library for validating JavaScript values, objects, and functi
     - [browserify](#browserify)
     - [webpack](#webpack)
 - [api](#api)
+  - [usage](#usage-1)
   - [built-in validation functions](#built-in-validation-functions)
+    - [common methods](#common-methods)
+      - [gng.[base].optional](#gngbaseoptional)
+      - [gng.[base].nullable](#gngbasenullable)
+      - [gng.[base].and](#gngbaseand)
+      - [gng.[base].or](#gngbaseor)
+      - [gng.[base].not](#gngbasenot)
+      - [gng.[base].values](#gngbasevalues)
     - [gng.any](#gngany)
-      - [gng.any.optional](#gnganyoptional)
-      - [gng.any.nullable](#gnganynullable)
-      - [gng.any.pass](#gnganypass)
-      - [the useless validator](#the-useless-validator)
     - [gng.string](#gngstring)
       - [gng.string.lengthOf](#gngstringlengthof)
       - [gng.string.match](#gngstringmatch)
@@ -36,6 +40,7 @@ gonogo is a _tiny_ library for validating JavaScript values, objects, and functi
       - [gng.array.lengthOf](#gngarraylengthof)
     - [gng.function](#gngfunction)
       - [gng.function.lengthOf](#gngfunctionlengthof)
+    - [anything-at-all validator](#anything-at-all-validator)
 - [related projects](#related-projects)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -52,7 +57,7 @@ $ npm install --save-dev gonogo
 
 `gonogo` is written with arrow functions, `const` / `let`, and template strings, so it'll run in any reasonable modern browser (Chrome, Firefox, Edge, Safari >= 10). For older browsers (Internet Explorer, Safari <= 9), you'll need a transform like [es2020][es2020].
 
-For, example, with broserify:
+For, example, with browserify:
 
 ``` shell
 $ npm install --save-dev browserify es2020
@@ -70,8 +75,8 @@ const gng = require('gonogo')
 
 const validate = gng({
   name: gng.string,
-  count: gng.number
-  children: gng.array.lengthOf(12).items(gng.object.keys({name: gng.string}))
+  count: gng.number.optional,
+  children: gng.array.lengthOf(3).items(gng.object.keys({name: gng.string}))
 })
 
 validate({
@@ -99,7 +104,7 @@ iHave('roy', 'flurbos') // throws
 
 #### validate prop types of a component
 
-Using wrap, you can have a lightweight and functional web component prop types checker that will work in any framework, non-framework, or non-non-framework.
+Using wrap, you can have a functional web component prop types checker that will work in any framework, non-framework, or non-non-framework.
 
 ``` js
 const gng = require('gonogo')
@@ -122,7 +127,7 @@ Component({text: 7})       // throws
 
 **THIS STUFF IS NOT IMPLEMENTED, BUT IT'S COMING PROBABLY (?)**
 
-If you're using `gonogo` as a tool during development, you probably want to remove these assertions in production builds.
+If you're using `gonogo` as a tool during development, removing these assertions in production builds can get you back most of the bytes this library takes up (around 2,500 of them, after minification and gzip).
 
 #### browserify
 
@@ -133,6 +138,8 @@ If you're using `gonogo` as a tool during development, you probably want to remo
 **DITTO FOR WEBPACK**
 
 ## api
+
+### usage
 
 `validate: function = gng(schema: object|function, [options: object])`
 
@@ -176,21 +183,25 @@ validate('fail') // throws with message '...failed to satisfy [the value "pass"]
 
 ### built-in validation functions
 
-gonogo comes with a collection of chainable validators to use in schemas.
+gonogo comes with a collection of validators with chainable methods to use in schemas.
 
-#### gng.any
+There are seven base validators:
 
-Tests that a value is not `null` or `undefined`
+* [gng.any][#gngany]
+* [gng.string][#gngstring]
+* [gng.number][#gngnumber]
+* [gng.boolean][#gngboolean]
+* [gng.object][#gngobject]
+* [gng.array][#gngarray]
+* [gng.function][#gngfunction]
 
-``` js
-gng.any('foo')     // true
-gng.any(undefined) // false
-gng.any(null)      // false
-```
+#### common methods
 
-All base validators, including `gng.any` have the following methods available:
+All base validators have certain methods available.
 
-##### gng.any.optional
+(These examples will use `gng.any`)
+
+##### gng.[base].optional
 
 Allows a value to be `undefined`
 
@@ -200,33 +211,87 @@ gng.any.optional(undefined) // true
 gng.any.optional(null)      // false
 ```
 
-##### gng.any.nullable
+##### gng.[base].nullable
 
 Allows a value to be `null`
 
 ``` js
 gng.any.nullable('foo')     // true
-gng.any.nullable(undefined) // true
-gng.any.nullable(null)      // false
+gng.any.nullable(undefined) // false
+gng.any.nullable(null)      // true
 ```
-##### gng.any.pass
+##### gng.[base].and
 
 Tests that the value also passes a given predicate
 
 ``` js
 const test = (value) => value === 'foo'
 
-gng.any.pass(test)('foo') // true
-gng.any.pass(test)('bar') // false
+gng.any.and(test)('foo') // true
+gng.any.and(test)('bar') // false
 ```
 
-##### the useless validator
-
-Will pass anything, including `null` and `undefined`
+Since the built-in validators are just functions, you can pass them into the `and` method:
 
 ``` js
-gng.any.optional.nullable(ANYTHING_OR_NOTHING) // true
+gng.any.and(gng.number)(42)    // true
+gng.any.and(gng.number)('bar') // false
 ```
+
+##### gng.[base].or
+
+Tests that the value also passes a given predicate while allowing the base validation to fail
+
+(Note: Because of the way validators are executed, the `or` test will run before the base test, which is probably opposite to what you expect. Sorry.)
+
+``` js
+const isFoo = (value) => value === 'foo'
+const isBar = (value) => value === 'bar'
+
+gng.any.and(isFoo).or(isBar)('foo') // true
+gng.any.and(isFoo).or(isBar)('bar') // true
+gng.any.and(isFoo).or(isBar)('baz') // false
+```
+
+Since the built-in validators are just functions, you can pass them into the `or` method:
+
+``` js
+gng.string.or(gng.number)('foo') // true
+gng.string.or(gng.number)(42)    // true
+gng.string.or(gng.number)(true)  // false
+```
+
+##### gng.[base].not
+
+Tests that the value does not satisfy given predicate (the opposite of `and`)
+
+``` js
+const test = (value) => value === 'foo'
+
+gng.any.not(test)('foo') // false
+gng.any.not(test)('bar') // true
+```
+
+Since the built-in validators are just functions, you can pass them into the `pass` method:
+
+``` js
+gng.any.not(gng.number)(42)    // false
+gng.any.not(gng.number)('bar') // true
+```
+
+##### gng.[base].values
+
+Tests that a value is _strictly equal_ to at least one element of the given array
+
+``` js
+gng.any.values(['foo', 42])('foo') // true
+gng.any.values(['foo', 42])(42)    // true
+gng.any.values(['foo', 42])('bar') // false
+```
+
+#### gng.any
+
+Tests that a given value exists (i.e. is not `null` or `undefined`). `gng.any` has all of the [common methods](#common-methods) available.
 
 #### gng.string
 
@@ -237,7 +302,7 @@ gng.string('foo') // true
 gng.string(12345) // false
 ```
 
-`gng.string` has all `gng.any` methods available as well as:
+`gng.string` has all of the [common methods](#common-methods) available as well as:
 
 ##### gng.string.lengthOf
 
@@ -267,7 +332,7 @@ gng.number(12345) // true
 gng.number('foo') // false
 ```
 
-`gng.number` has all `gng.any` methods available.
+`gng.number` has all of the [common methods](#common-methods) available.
 
 #### gng.boolean
 
@@ -278,7 +343,7 @@ gng.boolean(false) // true
 gng.boolean('foo') // false
 ```
 
-`gng.boolean` has all `gng.any` methods available.
+`gng.boolean` has all of the [common methods](#common-methods) available.
 
 #### gng.object
 
@@ -298,7 +363,7 @@ Tests that an object adheres to a schema, where the schema is an object with val
 
 ``` js
 const schema = {
-  foo: gng.string
+  foo: gng.string,
   bar: gng.number
 }
 
@@ -353,6 +418,15 @@ Tests that an function has a certain length (arity)
 ``` js
 gng.function.lengthOf(3)((a, b, c) => a + b + c)  // true
 gng.function.lengthOf(3)((a, b) => a + b)         // false
+```
+
+#### anything-at-all validator
+
+Will pass anything, including `null` and `undefined`
+
+``` js
+gng.any.optional.nullable(ANYTHING_OR_NOTHING) // true
+gng.any.or(() => true)(ANYTHING_OR_NOTHING)    // true
 ```
 
 ## related projects

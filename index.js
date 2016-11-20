@@ -1,6 +1,7 @@
 // gonogo simple object validator
 'use strict'
 
+const assign = require('object-assign')
 const base = require('./lib/base')
 const validate = require('./lib/validate')
 
@@ -16,4 +17,4 @@ const gng = function gonogo (schema) {
   }
 }
 
-module.exports = Object.assign(gng, validate)
+module.exports = assign(gng, validate)
