@@ -5,9 +5,9 @@ const stringify = require('../lib/stringify')
 
 suite('stringify', function () {
   test('primitives', function () {
-    assert(stringify(42) === '42')
-    assert(stringify(false) === 'false')
-    assert(stringify('foo') === '"foo"')
+    assert.equal(stringify(42), '42')
+    assert.equal(stringify(false), 'false')
+    assert.equal(stringify('foo'), '"foo"')
   })
 
   test('functions', function () {
