@@ -1,6 +1,6 @@
 {
   "name": "gonogo",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Simple object and function parameter validation",
   "main": "index.js",
   "scripts": {
