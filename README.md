@@ -66,7 +66,9 @@ $ browserify entry.js --global-transform=es2020 > bundle.js
 
 ## usage
 
-Pass `gonogo` a validator function or a schema object with validator functions as its values, and it will return a function you can use to validate values. For ease, `gonogo` comes packaged with a set of [chainable validator functions][#built-in-validation-functions] to use.
+Pass `gonogo` a validator function or a schema object with validator functions as its values, and it will return a function you can use to validate values. If a value passes validation, nothing will happen. If the value fails validation, an `Error` will be thrown.
+
+For ease, `gonogo` comes packaged with a set of [chainable validator functions](#built-in-validation-functions) to use.
 
 ### basic usage
 
@@ -125,17 +127,17 @@ Component({text: 7})       // throws
 
 ### production builds
 
-**THIS STUFF IS NOT IMPLEMENTED, BUT IT'S COMING PROBABLY (?)**
+THIS STUFF IS NOT IMPLEMENTED, BUT IT'S COMING PROBABLY (?)
 
 If you're using `gonogo` as a tool during development, removing these assertions in production builds can get you back most of the bytes this library takes up (around 2,500 of them, after minification and gzip).
 
 #### browserify
 
-**BROWSERIFY INSTRUCTIONS WILL GO HERE MAYBE SOON BUT ALSO MAYBE NOT SOON**
+BROWSERIFY INSTRUCTIONS WILL GO HERE MAYBE SOON BUT ALSO MAYBE NOT SOON
 
 #### webpack
 
-**DITTO FOR WEBPACK**
+DITTO FOR WEBPACK
 
 ## api
 
@@ -143,9 +145,11 @@ If you're using `gonogo` as a tool during development, removing these assertions
 
 `validate: function = gng(schema: object|function, [options: object])`
 
-gonogo takes a schema object or validation function. It returns a function that you may use to validate a target. If the schema is not valid, gonogo will throw.
+`gonogo` takes a schema object or validation function. It returns a function that you may use to validate a target.
 
-Given a validation function, the test target will be passed to the function and a true / false return value will determine if the target is valid. Given a schema object, each key of the object should be a validation function. Those keys will be used to validate their corresponding values of the test target.
+Given a validation function, the test target value will be passed to the function and a true / false return value will determine if the target is valid. Given a schema object, each key of the object should be a validation function. Those keys will be used to validate their corresponding values of the test target.
+
+If a validation function returns `false`, `gonogo` will throw. If a validation function return `true`, nothing will happen.
 
 Example with validation function:
 
@@ -187,13 +191,13 @@ gonogo comes with a collection of validators with chainable methods to use in sc
 
 There are seven base validators:
 
-* [gng.any][#gngany]
-* [gng.string][#gngstring]
-* [gng.number][#gngnumber]
-* [gng.boolean][#gngboolean]
-* [gng.object][#gngobject]
-* [gng.array][#gngarray]
-* [gng.function][#gngfunction]
+* [gng.any](#gngany)
+* [gng.string](#gngstring)
+* [gng.number](#gngnumber)
+* [gng.boolean](#gngboolean)
+* [gng.object](#gngobject)
+* [gng.array](#gngarray)
+* [gng.function](#gngfunction)
 
 #### common methods
 
